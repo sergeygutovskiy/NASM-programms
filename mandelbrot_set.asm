@@ -71,7 +71,7 @@ m2:
 	pop bx	   ; x^2 + y^2
 	add ax, bx ;
 	pop bx     ;
-	add dx, bx ;
+	adc dx, bx ;
 
 	pop cx ; restore iterator
 	cmp dx, 0       ; result is >= 4.0 ?
@@ -84,21 +84,21 @@ m2:
 	;
 
 	push cx	; save iterator
-	mov ax, [v_x + 0] ; get x and square it
-	mov dx, [v_x + 2] ; 
+	mov ax, [v_y + 0] ; get x and square it
+	mov dx, [v_y + 2] ; 
 	call square32     ;
 	
 	push dx ; save squared x
 	push ax ; 
 
-	mov ax, [v_y + 0] ; get y and square it
-	mov dx, [v_y + 2] ;
+	mov ax, [v_x + 0] ; get y and square it
+	mov dx, [v_x + 2] ;
 	call square32     ;
 
 	pop bx	   ; x^2 - y^2
 	sub ax, bx ;
 	pop bx     ;
-	sub dx, bx ;
+	sbb dx, bx ;
 
 	add ax, [v_b]
 	adc dx, 0
@@ -121,9 +121,9 @@ m2:
 	mov bx, [v_y + 0] ; get y
 	mov cx, [v_y + 2] ;
 
-	call square32
+	call mul32
 
-	shr ax, 1
+	shl ax, 1
 	rcl dx, 1
 
 	add ax, [v_a]
@@ -219,12 +219,12 @@ mul32_3:
 	mov ax, [v_s1 + 2]
 	mul bx
 	add [v_s2 + 2], ax 
-	add [v_s2 + 4], bx
+	add [v_s2 + 4], dx
 
 	mov ax, [v_s1]
 	mul cx
 	add [v_s2 + 2], ax 
-	add [v_s2 + 4], bx
+	add [v_s2 + 4], dx
 
 	mov ax, [v_s2 + 1]
 	mov dx, [v_s2 + 3]
